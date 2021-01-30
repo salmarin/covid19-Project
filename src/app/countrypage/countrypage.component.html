@@ -1,0 +1,135 @@
+<a routerLinkActive="active" routerLink="/countrypage"> Global Summary</a>
+<!-- <div>
+    <a [routerLink]="['/countrypage/', country.slug]">Country Detail</a>
+</div> -->
+
+<div class="text-right">
+    <button *ngIf="!countrypageService.userSignedIn()" class="btn btn-info" (click)="countrypageService.toSignin()"> Sign In </button> 
+    <button *ngIf="countrypageService.userSignedIn()" class="btn btn-danger" (click)="countrypageService.signOut()"> Sign Out </button> 
+    <button *ngIf="countrypageService.userSignedIn()" class="btn btn-info" (click)="countrypageService.toaddnews()"> Add News </button>
+
+</div>   
+
+
+<h1 class=" mb-3 text-center">{{ country.country }}</h1>
+
+
+<div *ngIf="AllDataReady">
+   <!-- <div >
+         <h3>{{ country.country }}</h3>  
+         <h3 *ngFor="let day of days">{{ country_data[day]["Confirmed"] }}</h3> 
+         
+    </div> -->
+
+
+    <table class="table table-bordered table-triped table-hover">
+
+    <tbody> 
+        <tr>
+            <td> Total Cases </td>
+            <td> {{country.totalConfirmed}} </td>
+
+        </tr>  
+        <tr>
+            <td> New Cases </td>
+            <td> {{country.newConfirmed}} </td>
+
+        </tr>    
+
+        <tr>
+            <td> Active Cases </td>
+            <td> {{country.activeCases}} </td>
+
+        </tr>  
+       
+
+        <tr>
+            <td> New Recovered </td>
+            <td> {{country.newRecovered}} </td>
+
+        </tr> 
+        <tr>
+            <td> Total Recovered </td>
+            <td> {{country.totalRecovered}} </td>
+
+        </tr>  
+        <tr>
+            <td> Recovery Rate </td>
+            <td> {{country.recoveryRate}}% </td>
+
+        </tr>  
+        <tr>
+            <td> Total Deaths </td>
+            <td> {{country.totalDeaths}} </td>
+
+        </tr>  
+        <tr>
+            <td> New Deaths </td>
+            <td> {{country.newDeaths}} </td>
+
+        </tr>  
+
+        <tr>
+            <td> Mortality Rate </td>
+            <td> {{country.mortalityRate}}% </td>
+
+        </tr>  
+  
+    </tbody>    
+    
+</table>
+<div class="chart-wrapper" *ngIf="barChartReady">
+    <canvas baseChart 
+    [data]="pieChartData" 
+    [labels]="pieChartLabels" 
+    [chartType]="pieChartType"
+    [options]="pieChartOptions"
+    [plugins]="pieChartPlugins"
+    [legend]="pieChartLegend">
+  </canvas>
+  <div class="chart-wrapper">
+    <canvas baseChart 
+    [datasets]="barChartData"
+    [labels]="barChartLabels"
+    [options]="barChartOptions"
+    [plugins]="barChartPlugins"
+    [legend]="barChartLegend"
+    [chartType]="barChartType">
+  </canvas>
+</div>
+
+<div class="chart-wrapper">
+    <canvas baseChart 
+        [datasets]="lineChartData" 
+        [labels]="lineChartLabels" 
+        [options]="lineChartOptions"
+        [legend]="lineChartLegend"
+        [chartType]="lineChartType" 
+        [plugins]="lineChartPlugins">
+    </canvas>
+</div>
+
+</div>
+
+
+</div>
+
+<a class="text-center" href=" https://covid19api.com"> Data Source: Covid19 API / Johns Hopkins CSSE </a>
+
+<div class="my-5 text-center">
+    <h3> Here are the latest news in {{country.country}}:</h3>
+<table class="table table-bordered table-triped table-hover" *ngFor="let new of news">
+    <thead>  
+        <tr class="text-center">
+            <th> {{new.date.toDate() | date}} </th> 
+        </tr>                
+    </thead>
+    <tbody> 
+        <tr >
+            <td> {{new.description}} </td>
+
+        </tr>      
+    </tbody>
+    <tfoot> News added by {{new.user.displayName}} </tfoot>    
+</table>
+</div>

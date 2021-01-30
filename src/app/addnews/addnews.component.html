@@ -1,0 +1,39 @@
+<div class="mb-6"> 
+    <button class="btn btn-info" (click)="addnewsService.toHomepage()"> Go to Homepage </button>
+
+</div>
+
+<form (ngSubmit)="addNews()">
+    <div class="row mb-3">
+           <div class="col-md-6">
+               <label for="dateInput">Date</label>
+               <input type="date" id="dateInput" name="dateInput"
+                class="form-control"
+                [(ngModel)]="date"
+                required />
+           </div>
+           <div class="col-md-6">
+               <label for=""> Country (or Worldwide) </label>
+               <input
+               type="text" id="countryInput" name="countryInput" class="form-control"
+               pacedype="How many do deaths"
+               [(ngModel)]="country"
+               required />
+           </div>
+    
+           <div class="row mb-3">
+               <div class="col-12">
+                   <label for="">Description</label>
+                   <input type="text" id="descriptionInput"
+                   name="descriptionInput" class="form-control"
+                   paceholder="what is it about?"
+                   [(ngModel)]="description" 
+                   required  />
+    
+               </div>
+            </div>
+    
+    
+           </div>   
+           <button class="btn btn-primary"> Add</button>
+    </form>

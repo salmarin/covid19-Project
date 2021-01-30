@@ -1,0 +1,200 @@
+<div class="text-center">
+    
+   
+    <div class="row">
+        <div class="col-sm-6 text-left"> 
+            <h4 *ngIf="user != null"> Hello {{ user.displayName }}</h4>
+            
+        </div>
+        <div class="col-sm-6 text-right">
+            <button *ngIf="!homepageService.userSignedIn()" class="btn btn-info" (click)="homepageService.toSignin()"> Sign In </button> 
+            <button *ngIf="homepageService.userSignedIn()" class="btn btn-danger" (click)="homepageService.signOut()"> Sign Out </button> 
+            <button *ngIf="homepageService.userSignedIn()" class="btn btn-info" (click)="homepageService.toaddnews()"> Add News </button>
+
+        </div>       
+    </div>
+
+    <div class="text-center"> 
+        <img
+        style="width:5%"
+        src="https://firebasestorage.googleapis.com/v0/b/covid19-5aed2.appspot.com/o/Healthcare-Virus-icon.png?alt=media&token=a2369847-7087-4056-847c-2563650cc021"
+        alt="covid"
+      />
+        <h2> Global Summary</h2>
+    </div>
+
+    <div class="my-3" >
+        <table class="table table-bordered table-triped table-hover">
+            <tbody> 
+                <tr>
+                    <td> Total Cases</td>
+                    <td> {{global_data["TotalConfirmed"]}} </td>
+                </tr>  
+                <tr >
+                    <td> New Cases </td>
+                    <td> {{global_data["NewConfirmed"]}} </td>
+                </tr>
+                   <tr >
+                    <td> Active Cases </td>
+                    <td> {{active_cases}} </td>
+                </tr>
+                <tr >
+                    <td> Total Recovered </td>
+                    <td> {{global_data["TotalRecovered"]}} </td>
+                </tr>    
+                <tr >
+                    <td> New Recovered </td>
+                    <td> {{global_data["NewRecovered"]}} </td>
+                </tr>
+                <tr >
+                    <td> Recovery Rate </td>
+                    <td> {{recovery_rate}}% </td>
+                </tr>
+                <tr >
+                    <td> Total Deaths </td>
+                    <td> {{global_data["TotalDeaths"]}} </td>
+                </tr>
+                <tr >
+                    <td> New Deaths </td>
+                    <td> {{global_data["NewDeaths"]}} </td>
+                </tr>
+                <tr >
+                    <td> Mortality Rate </td>
+                    <td> {{mortality_rate}}% </td>
+                </tr>
+            </tbody>    
+        </table>
+        <p class="font-italic"> Last Updated : {{today.toDateString() | date }}  </p>
+    </div>
+
+    <div class="mb-5 my-5 text-center"> 
+        <h2> Cases Distribution Globally</h2>
+    </div>
+<div class="my-3">
+    <div class="chart-wrapper" >
+        <canvas baseChart 
+        [data]="pieChartData" 
+        [labels]="pieChartLabels" 
+        [chartType]="pieChartType"
+        [options]="pieChartOptions"
+        [plugins]="pieChartPlugins"
+        [legend]="pieChartLegend">
+      </canvas>
+    </div>
+
+    <div class="mb-5 my-5 text-center"> 
+        <h2>Cases' Evolution in the Last 30 days </h2>
+    </div>
+
+    <div class="chart-wrapper" *ngIf="pieChartReady">
+        <canvas baseChart 
+            [datasets]="lineChartData" 
+            [labels]="lineChartLabels" 
+            [options]="lineChartOptions"
+            [legend]="lineChartLegend"
+            [chartType]="lineChartType" 
+            [plugins]="lineChartPlugins">
+        </canvas>
+    </div>
+    <div class="mb-5 my-5 text-center"> 
+        <h2>Daily Cases Distribution in the Last 7 days </h2>
+    </div>
+    <div class="chart-wrapper">
+        <canvas baseChart 
+        [datasets]="barChartData"
+        [labels]="barChartLabels"
+        [options]="barChartOptions"
+        [plugins]="barChartPlugins"
+        [legend]="barChartLegend"
+        [chartType]="barChartType">
+      </canvas>
+    </div>
+
+</div>
+                            
+
+</div>
+
+<!-- <table class="table table-bordered table-triped table-hover">
+    <thead>  
+        <tr class="text-center">
+            <th> Country</th> 
+            <th> New Confirmed</th>
+            <th> Total Confirmed</th>
+            <th> New Deaths</th>
+            <th> Total Deaths</th>
+            <th> New Recovered</th>
+            <th> Total Recovered</th>
+
+        </tr>                
+    </thead>
+    <tbody> 
+        <tr *ngFor="let country of countries_data" (click)="homepageService.gotocountry(country)" >
+            <td> {{country["Country"]}} </td>
+            <td> {{country["NewConfirmed"]}} </td>
+            <td> {{country["TotalConfirmed"]}} </td>
+            <td> {{country["NewDeaths"]}} </td>
+            <td> {{country["TotalDeaths"]}} </td>
+            <td> {{country["NewRecovered"]}} </td>
+            <td> {{country["TotalRecovered"]}} </td>
+
+            
+
+        </tr>      
+    </tbody>    
+</table> -->
+<div class="text-center">
+<a  href=" https://covid19api.com"> Data Source: Covid19 API / Johns Hopkins CSSE </a>
+</div>
+<div class="mb-5 my-5 text-center"> 
+    <h2> Corona Virus Cases' Distribution by Country </h2>
+</div>
+
+<table  mat-table  matSort (matSortChange)="sortData($event)" class="table table-bordered table-hover" >
+    <tr>
+      <th mat-sort-header="Country">Country</th>
+      <th mat-sort-header="NewConfirmed">New Confirmed</th>
+      <th mat-sort-header="TotalConfirmed"> Total Confirmed</th>
+      <th mat-sort-header="NewDeaths"> New Deaths</th>
+      <th mat-sort-header="TotalDeaths"> Total Deaths</th>
+      <th mat-sort-header="NewRecovered">New Recovered</th>
+      <th mat-sort-header="TotalRecovered">Total Recovered</th>
+
+    </tr>
+  
+    <tr *ngFor="let country of sortedData" (click)="homepageService.gotocountry(country)">
+        <td> {{country["Country"]}} </td>
+        <td> {{country["NewConfirmed"]}} </td>
+        <td> {{country["TotalConfirmed"]}} </td>
+        <td> {{country["NewDeaths"]}} </td>
+        <td> {{country["TotalDeaths"]}} </td>
+        <td> {{country["NewRecovered"]}} </td>
+        <td> {{country["TotalRecovered"]}} </td>
+    </tr>
+  </table>
+
+  
+
+  
+
+
+<div class="my-5 text-center">
+    <h3> Here are the latest news in WorldWide:</h3>
+<table class="table table-bordered table-triped table-hover" *ngFor="let new of Globalnews">
+    <thead>  
+        <tr class="text-center">
+            <th> {{new.date.toDate() | date}}</th> 
+        </tr>                
+    </thead>
+    <tbody> 
+        <tr >
+            <td> {{new.description}} </td>
+
+        </tr>      
+    </tbody>    
+
+    <tfoot> News added by {{new.user.displayName}} </tfoot>    
+
+</table>
+</div>
+
